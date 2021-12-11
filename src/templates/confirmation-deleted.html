@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Bestätigung{% endblock %}
+
+{% block content %}
+    <div>
+        <h4>Termin gelöscht</h4>
+        <p>Ihre Termin wurde erfolgreich gelöscht.</p>
+        <p>Sie können <a href="{{ url_for("web.index") }}">HIER</a> jederzeit einen neuen Termin buchen.</p>
+    </div>
+{% endblock %}

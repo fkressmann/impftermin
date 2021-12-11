@@ -3,7 +3,6 @@
 {% block title %}Impftermin buchen{% endblock %}
 
 {% block content %}
-    <h1>Terminbuchung Impfaktion Stadecken-Elsheim</h1>
     <h4>Wählen Sie einen verfügbaren Zeitslot aus.</h4>
     <div>
         <form action="{{ url_for('web.reservation') }}" method="post">
@@ -31,7 +30,7 @@
                     {% set free_capacity = slot.get_free_capacity() %}
                     <input type="radio" class="btn-check" name="timeslot" id="{{ slot.id }}" autocomplete="off"
                            value="{{ slot.id }}" required {% if free_capacity <= 0 %}disabled{% endif %}>
-                    <label class="btn btn-outline-{% if free_capacity <= 0 %}secondary{% else %}success{% endif %}" for="{{ slot.id }}">
+                    <label class="btn btn-outline-{% if free_capacity <= 0 %}secondary{% elif free_capacity < 3 %}warning{% else %}success{% endif %}" for="{{ slot.id }}">
                         <b>{{ slot.start_time | time }}</b> Freie Plätze: {{ free_capacity }}
                     </label>
                 {% endfor %}
