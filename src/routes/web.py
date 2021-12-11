@@ -47,3 +47,9 @@ def confirm():
     maybe_booking.ack_at = datetime.datetime.now()
     db.session.commit()
     return render_template("confirmation.html", reservation=maybe_booking)
+
+
+@web_bp.route('/admin-6a3522f3-6c6e-4b0e-a044-d653177fbb91')
+def admin():
+    timeslots = Timeslot.query.all()
+    return render_template("admin.html", timeslots=timeslots)
