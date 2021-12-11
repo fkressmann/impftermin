@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Bestätigung{% endblock %}
+
+{% block content %}
+    <h1>Terminbuchung Impfaktion Stadecken-Elsheim</h1>
+    <div>
+        <h4>Termin bestätigt</h4>
+        <p>Ihre Termin für {{ reservation.timeslot.start_time | time }} wurde reserviert.</p>
+        <p><strong>Bitte kommen Sie pünktlich zur genannten Uhrzeit um einen reibungslosen Ablauf der Impfungen zu
+            ermöglichen.</strong></p>
+    </div>
+
+{% endblock %}

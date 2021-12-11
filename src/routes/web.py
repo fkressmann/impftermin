@@ -1,3 +1,5 @@
+import datetime
+
 from flask import Blueprint, render_template, request
 
 from extensions.db import db
@@ -27,7 +29,19 @@ def reservation():
         print(f"Free:{r.timeslot.get_free_capacity()}")
         db.session.add(booking)
         db.session.commit()
-        return "success!", 200
+        return render_template("reservation.html", reservation=booking), 200
     else:
         return "Invalid request!", 400
+
+
+@web_bp.route('/confirm')
+def confirm():
+    maybe_booking: Booking= Booking.query.get(request.args.get("id"))
+    if not maybe_booking:
+        return "Reservation not found", 404
+
+    maybe_booking.ack_at = datetime.datetime.now()
+    db.session.commit()
+    return render_template("confirmation.html", reservation=maybe_booking)
+
 

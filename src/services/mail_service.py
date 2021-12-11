@@ -6,8 +6,6 @@ from flask import current_app
 
 
 def send_mail(to, bcc, subject, body):
-    to = [current_app.config.get('MAIL_REPLY_TO')] if current_app.debug else to
-
     message = MIMEMultipart()
     message['Subject'] = subject
     message['From'] = f"Gemeinde Stadecken-Elsheim <{current_app.config.get('MAIL_SENDER')}>"

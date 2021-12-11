@@ -3,22 +3,27 @@
 {% block title %}Impftermin buchen{% endblock %}
 
 {% block content %}
-    <h2>Terminbuchung Impfaktion Stadecken-Elsheim</h2>
-    <p>Wählen Sie einen verfügbaren Zeitslot aus.</p>
+    <h1>Terminbuchung Impfaktion Stadecken-Elsheim</h1>
+    <h4>Wählen Sie einen verfügbaren Zeitslot aus.</h4>
     <div>
         <form action="{{ url_for('web.reservation') }}" method="post">
             <div class="mb-3 mt-3">
                 <label for="name" class="form-label">Vor- und Nachname:</label>
-                <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name" required>
+                <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name"
+                       aria-describedby="nameInfo" required>
+                <div id="nameInfo" class="form-text">
+                    Wir benötigen Ihren vollen Namen zum Abgleich am Tag der Impfung.
+                </div>
             </div>
             <div class="mb-3 mt-3">
                 <label for="email" class="form-label">E-Mail Adresse:</label>
                 <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse eingeben" name="email"
                        aria-describedby="emailInfo" required>
+                <div id="emailInfo" class="form-text">
+                    Wir werden eine E-Mail zur Terminbestätigung an diese Adresse senden. Ihre E-Mail Adresse wird nicht anderweitg verwendet und nach der Impfaktion gelöscht.
+                </div>
             </div>
-            <div id="emailInfo" class="form-text">
-                Wir werden eine E-Mail zur Terminbestätigung an diese Adresse senden.
-            </div>
+
 
             <div class="mb-3 mt-3">
                 <label for="timeslot" class="form-label">Termin auswählen:</label><br>

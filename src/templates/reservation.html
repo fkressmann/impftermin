@@ -3,36 +3,19 @@
 {% block title %}Reservierung{% endblock %}
 
 {% block content %}
-    <h2>Terminbuchung Impfaktion Stadecken-Elsheim</h2>
-    <p>Wählen Sie einen verfügbaren Zeitslot aus.</p>
+    <h1>Terminbuchung Impfaktion Stadecken-Elsheim</h1>
+    <h4>Terminanfrage bestätigt</h4>
     <div>
-        <form action="{{ url_for('web.reservation') }}" method="post">
-            <div class="mb-3 mt-3">
-                <label for="name" class="form-label">Vor- und Nachname:</label>
-                <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name" required>
-            </div>
-            <div class="mb-3 mt-3">
-                <label for="email" class="form-label">E-Mail Adresse:</label>
-                <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse eingeben" name="email"
-                       aria-describedby="emailInfo" required>
-            </div>
-            <div id="emailInfo" class="form-text">
-                Wir werden eine E-Mail zur Terminbestätigung an diese Adresse senden.
-            </div>
-
-            <div class="mb-3 mt-3">
-                <label for="timeslot" class="form-label">Termin auswählen:</label><br>
-                {% for slot in timeslots %}
-                    {% set free_capacity = slot.get_free_capacity() %}
-                    <input type="radio" class="btn-check" name="timeslot" id="{{ slot.id }}" autocomplete="off"
-                           value="{{ slot.id }}" required {% if free_capacity <= 0 %}disabled{% endif %}>
-                    <label class="btn btn-outline-{% if free_capacity <= 0 %}secondary{% else %}success{% endif %}" for="{{ slot.id }}">
-                        <b>{{ slot.start_time | time }}</b> Freie Plätze: {{ free_capacity }}
-                    </label>
-                {% endfor %}
-            </div>
-
-            <button type="submit" class="btn btn-primary">Absenden</button>
-        </form>
+        <p>Ihre Anfrage für {{ reservation.timeslot.start_time | time }} wurde entgegen genommen.<br>
+        Eine E-Mail mit Bestätigungslink wurde an {{ reservation.email }} gesendet.<br>
+            Bitte klicken Sie auf den Link in der E-Mail um Ihre Buchung zu bestätigen.</p>
+        <p><strong>Achtung: Erst danach wird der Termin für Sie reserviert!</strong></p>
     </div>
+
+    {% if config.DEBUG %}
+    <div>
+    <h4>DEBUG</h4>
+    <a href="{{ url_for("web.confirm", id=reservation.id) }}">Bestätigungslink</a>
+    </div>
+    {% endif %}
 {% endblock %}
