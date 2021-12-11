@@ -1,12 +1,9 @@
-from datetime import datetime, timedelta
-
-from flask import Blueprint, session, get_flashed_messages, render_template, request, flash, current_app, jsonify
-from sqlalchemy import func
+from flask import Blueprint, render_template, request
 
 from extensions.db import db
 from models.Timeslot import Timeslot
 from models.Booking import Booking
-from routes.util import *
+from requests.Reservation import Reservation
 
 web_bp = Blueprint('web', __name__)
 
@@ -19,5 +16,18 @@ def index():
 
 @web_bp.route('/reservation', methods=['POST'])
 def reservation():
-    return request.form, 200
+    r = Reservation(request.form)
+    if r.valid:
+        if not r.timeslot.has_free_capacity():
+            return "Timeslot is fully booked", 418
+
+        booking = Booking(name=r.name,
+                          email=r.email,
+                          timeslot=r.timeslot)
+        print(f"Free:{r.timeslot.get_free_capacity()}")
+        db.session.add(booking)
+        db.session.commit()
+        return "success!", 200
+    else:
+        return "Invalid request!", 400
 

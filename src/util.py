@@ -1,3 +1,5 @@
+import uuid
+
 from flask import url_for, redirect
 
 FLASH_DANGER = 'danger'
@@ -12,3 +14,6 @@ def redirect_index():
 
 def redirect_overview():
     return redirect(url_for('web.overview'))
+
+def generate_uuid() -> str:
+    return str(uuid.uuid4())
