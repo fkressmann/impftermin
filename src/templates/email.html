@@ -1,0 +1,16 @@
+{% extends "email_template.html" %}
+{% block body %}
+<h2>{{ _("You successfully registered for our BI X-Mas Challenge!") }}</h2>
+<p>{{ _("Your team name is:") }} {{ team }}</p>
+<p>{{ _("Your colleagues can use the team name above or the following invitation link to join your team:") }}
+    <a href="https://{{ host }}{{ url_for("web.index", team=team) }}">{{ _("Invitation Link") }}</a><br>
+    {{ _("Just click the forward button to invite your colleagues to your team!") }}<br>
+    {{ _("Please note that there is a limit of 15 people per team due to the prizes to be won.") }}<br>
+    {{ _("You'll see new team members in the team overview.") }}</p>
+<p>{{ _("To access the WebApp, use the following link:") }} <a href="https://{{ host }}{{ url_for("web.index") }}">{{ host }}</a><br>
+    {{ _("You can access the challenge from you private device, too.") }} <br>
+    {{ _("Copy the link above or relay this mail to your private account.") }}</p>
+<p>{{ _("Have fun :)") }}</p>
+
+- {{ _("The challenge admin team") }} Annika & Felix
+{% endblock %}

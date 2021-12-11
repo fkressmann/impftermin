@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+
+{% block title %}BI X-mas challenge{% endblock %}
+
+{% block header %}
+    <p></p>
+    <div class="jumbotron">
+        <p>{{ _("Welcome to our X&#8209;Mas&nbsp;Challenge") }}</p>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <h2>{{ _("Sign up") }}</h2>
+    <p>{{ _("Howdy %(gn)s! We're happy to see you! In the below signup form, we intentionally don't ask for your real name for privacy reasons as all your team members can see it. We are curious about your creativity ;)", gn=given_name or "new Christmas Elf") }}</p>
+    <form method="POST" action="{{ url_for('auth.signup') }}" id="signUp">
+        <div class="form-group">
+            <label for="pseudo2">{{ _("Your Christmas Elf name:") }}</label>
+            <input class="form-control" type="text" id="pseudo2" name="pseudo" autocomplete="off" required>
+            <div class="valid-feedback">
+                {{ _("Looks good!") }}
+            </div>
+            <div class="invalid-feedback">
+                {{ _("This name is already taken") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <label>{{ _("Do you want to…") }}</label>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="joinorcreate" value="join"
+                           onclick="change_team_label(this)" checked>{{ _("…join an exisiting team") }} <br><span style="font-weight: normal">{{ _("You received the team name from an already registered colleague") }}</span>
+                </label>
+            </div>
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="radio" class="form-check-input" name="joinorcreate" value="create"
+                           onclick="change_team_label(this)"
+                           {% if team %}disabled{% endif %}>{{ _("…create a new team") }} <br><span style="font-weight: normal">{{ _("You will receive an email to distribute to your colleagues") }}</span>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="team" id="team-label">{{ _("Search for existing team:") }}</label>
+            <input class="form-control" type="text" id="team" name="team"
+                   value="{{ team if team else "" }}" {% if team %}readonly{% endif %} autocomplete="off" required>
+            <div class="valid-feedback">
+                {{ _("Looks good!") }}
+            </div>
+            <div class="invalid-feedback" id="team-invalid">
+                {{ _("This name is already taken") }}
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="form-check">
+                <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input" required>{{ _("I accept the") }} <a
+                        href="#" data-toggle="modal" class="dps-modal-btn"
+                        data-target="#dps-modal"><u>{{ _("Data Privacy Statement") }}</u></a>
+                </label>
+            </div>
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn btn-xmas">{{ _("Sign up!") }}</button>
+        </div>
+    </form>
+
+    <script>
+        let user_req = null;
+        let team_req = null;
+        $(document).ready(function () {
+            $("#pseudo2").on('input', function validate_username() {
+                const field = $(this); // this.value
+                if (user_req) {
+                    user_req.abort();
+                }
+
+                user_req = $.ajax({
+                    url: 'check_username',
+                    data: {q: field.val()},
+                    type: 'get'
+                }).done(function (responseData) {
+                    if (responseData === "ok") {
+                        setValid(field)
+                    } else {
+                        setInvalid(field)
+                    }
+                }).fail(function () {
+                    console.log('Request Failed');
+                });
+            });
+        });
+
+        $(document).ready(function () {
+            $("#team").on('input', function validate_username() {
+                const field = $(this); // this.value
+                if (team_req) {
+                    team_req.abort();
+                }
+
+                team_req = $.ajax({
+                    url: 'check_team',
+                    data: {q: field.val()},
+                    type: 'get'
+                }).done(function (responseData) {
+                    if ($('input[name=joinorcreate]:checked', '#signUp').val() === 'create') {
+                        if (responseData === "n/a") {
+                            setValid(field);
+                        } else {
+                            setInvalid(field);
+                            $("#team-invalid").text("{{ _("This name is already taken") }}");
+                        }
+                    } else {
+                        if (responseData === "ok") {
+                            setValid(field);
+                        } else if (responseData === "full") {
+                            setInvalid(field);
+                            $("#team-invalid").text("{{ _("Team is full") }}");
+                        } else {
+                            setInvalid(field);
+                            $("#team-invalid").text("{{ _("This team does not exist") }}");
+                        }
+                    }
+                }).fail(function () {
+                    console.log('Request failed');
+                });
+            });
+        });
+
+        function setValid(id) {
+            $(id).addClass("is-valid").removeClass("is-invalid");
+        }
+
+        function setInvalid(id) {
+            $(id).addClass("is-invalid").removeClass("is-valid");
+        }
+
+        function change_team_label(button) {
+            if (button.value === 'join') {
+                $("#team-label").text("{{ _("Search for existing team:") }}")
+            } else {
+                $("#team-label").text("{{ _("New Team Name:") }}")
+            }
+        }
+    </script>
+{% endblock %}
