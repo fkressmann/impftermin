@@ -10,7 +10,8 @@
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="PackageRequirementsSettings">
-    <option name="removeUnused" value="true" />
+    <option name="requirementsPath" value="$MODULE_DIR$/docker/requirements.txt" />
+    <option name="keepMatchingSpecifier" value="false" />
   </component>
   <component name="TemplatesService">
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
