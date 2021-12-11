@@ -13,5 +13,11 @@ web_bp = Blueprint('web', __name__)
 
 @web_bp.route('/')
 def index():
-    return Timeslot.query.all(), 200
+    timeslots: [Timeslot] = Timeslot.query.all()
+    return render_template('index.html', timeslots=timeslots)
+
+
+@web_bp.route('/reservation', methods=['POST'])
+def reservation():
+    return request.form, 200
 
