@@ -3,38 +3,70 @@
 {% block title %}Impftermin buchen{% endblock %}
 
 {% block content %}
-    <h4>Bitte wählen Sie Ihr gewünschtes Zeitfenster aus</h4>
-    <p>Die Registrierung für einen Impftermin ist bis zum {{ end | time }} möglich.</p>
+    <div class="row">
+        <h4>Bitte wählen Sie Ihr gewünschtes Zeitfenster aus</h4>
+        <p>Die Registrierung für einen Impftermin ist bis zum {{ end | time }} möglich.</p>
+    </div>
     <div>
         <form action="{{ url_for('web.reservation') }}" method="post">
-            <div class="mb-3 mt-3">
-                <label for="name" class="form-label">Vor- und Nachname:</label>
-                <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name" aria-describedby="nameInfo" required>
-                <div id="nameInfo" class="form-text">
-                    Wir benötigen Ihren vollen Namen zum Abgleich am Tag der Impfung.
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="name" class="form-label">Vor- und Nachname:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name" aria-describedby="nameInfo" required>
+                    <div id="nameInfo" class="form-text">
+                        Wir benötigen Ihren vollen Namen zum Abgleich am Tag der Impfung.
+                    </div>
                 </div>
             </div>
-            <div class="mb-3 mt-3">
-                <label for="email" class="form-label">E-Mail Adresse:</label>
-                <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse eingeben" name="email" aria-describedby="emailInfo" required>
-                <div id="emailInfo" class="form-text">
-                    Wir werden eine E-Mail zur Terminbestätigung an diese Adresse senden. Ihre E-Mail Adresse wird nicht
-                    anderweitg verwendet und nach der Impfaktion gelöscht.
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="email" class="form-label">E-Mail Adresse:</label>
+                    <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse eingeben" name="email" aria-describedby="emailInfo" required>
+                    <div id="emailInfo" class="form-text">
+                        Wir werden eine E-Mail zur Terminbestätigung an diese Adresse senden. Ihre E-Mail Adresse wird
+                        nicht anderweitg verwendet und nach der Impfaktion gelöscht.
+                    </div>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="vaccination" class="form-label">Gewünsche Impfung:</label>
+                    <select class="form-select" name="vaccination" required>
+                        <option selected disabled value="">Auswählen...</option>
+                        <option value="1">Erstimpfung</option>
+                        <option value="2">Abschlussimpfung / Zweite Impfung</option>
+                        <option value="3">Booster Impfung</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="age" class="form-label">Alter:</label>
+                    <select class="form-select" name="age" aria-describedby="ageInfo" required>
+                        <option selected disabled value="">Auswählen...</option>
+                        <option value="<30">Unter 30 Jahre</option>
+                        <option value=">=30">30 Jahre oder älter</option>
+                    </select>
+                    <div id="ageInfo" class="form-text">
+                        Wir benötigen Ihr Alter um den richtigen Impfstoff für Sie vorzubereiten.
+                    </div>
                 </div>
             </div>
 
 
-            <div class="mb-3 mt-3">
-                <label for="timeslot" class="form-label">Termin auswählen:</label><br>
-                <div class="row">
-                    <div class="col-12">
-                        {% for slot in timeslots %}
-                            {% set free_capacity = slot.get_free_capacity() %}
-                            <input type="radio" class="btn-check" name="timeslot" id="{{ slot.id }}" autocomplete="off" value="{{ slot.id }}" required {% if free_capacity <= 0 %}disabled{% endif %}>
-                            <label class="m-1 btn btn-block btn-outline-{% if free_capacity <= 0 %}danger{% elif free_capacity < 3 %}warning{% else %}success{% endif %}" for="{{ slot.id }}">
-                                <b>{{ slot.start_time | time }}</b> Freie Plätze: {{ free_capacity }}
-                            </label>
-                        {% endfor %}
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="timeslot" class="form-label">Termin auswählen:</label><br>
+                    <div class="row">
+                        <div class="col-12">
+                            {% for slot in timeslots %}
+                                {% set free_capacity = slot.get_free_capacity() %}
+                                <input type="radio" class="btn-check" name="timeslot" id="{{ slot.id }}" autocomplete="off" value="{{ slot.id }}" required {% if free_capacity <= 0 %}disabled{% endif %}>
+                                <label class="m-1 btn btn-block btn-outline-{% if free_capacity <= 0 %}danger{% elif free_capacity < 3 %}warning{% else %}success{% endif %}" for="{{ slot.id }}">
+                                    <b>{{ slot.start_time | time }}</b> Freie Plätze: {{ free_capacity }}
+                                </label>
+                            {% endfor %}
+                        </div>
                     </div>
                 </div>
             </div>

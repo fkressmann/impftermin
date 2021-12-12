@@ -30,24 +30,26 @@ def reservation():
     r = Reservation(request.form)
     if r.is_valid_external_request():
         if not r.timeslot.has_free_capacity():
-            return "Timeslot is fully booked", 418
+            return "Dieses Zeitfenster ist leider ausgebucht", 400
 
         booking = Booking(name=r.name,
                           email=r.email,
-                          timeslot=r.timeslot)
+                          timeslot=r.timeslot,
+                          vaccination=r.vaccination,
+                          age=r.age)
 
         try:
             db.session.add(booking)
             db.session.commit()
-        except IntegrityError as e:
+        except IntegrityError:
             return render_template("email-duplicated.html")
 
         send_mail([booking.email],
                   "Terminanfrage Impfaktion Stadecken-Elsheim",
                   render_template("email.html", reservation=booking))
-        return render_template("reservation.html", reservation=booking), 200
+        return render_template("reservation.html", reservation=booking)
     else:
-        return "Invalid request!", 400
+        return "Diese Anfrage ist nicht gültig, bitte kehren Sie zur vorherigen Seite zurück und überprüfen Ihre Angaben", 400
 
 
 @web_bp.route('/confirm')

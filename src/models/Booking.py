@@ -11,6 +11,8 @@ class Booking(db.Model):
     email = db.Column(db.String(255), nullable=True, unique=True)
     booked_at = db.Column(db.DateTime, default=func.now())
     ack_at = db.Column(db.DateTime)
+    age = db.Column(db.String(10))
+    vaccination = db.Column(db.String(100))
 
     timeslot_id = db.Column(db.String(36), db.ForeignKey('timeslot.id'), nullable=False)
     timeslot = db.relationship('Timeslot', backref=db.backref('bookings'), lazy=False)

@@ -25,6 +25,8 @@ def create():
         booking = Booking(name=r.name,
                           email=r.email,
                           timeslot=r.timeslot,
+                          vaccination=r.vaccination,
+                          age=r.age,
                           ack_at=datetime.datetime.now())
         db.session.add(booking)
         db.session.commit()

@@ -9,9 +9,7 @@
         {% for slot in timeslots %}
             <div class="accordion-item">
                 <h2 class="accordion-header" id="heading{{ slot.id }}">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#collapse{{ slot.id }}"
-                            aria-expanded="true" aria-controls="collapse{{ slot.id }}">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ slot.id }}" aria-expanded="true" aria-controls="collapse{{ slot.id }}">
                         <strong>{{ slot.start_time | time }}</strong>
                     </button>
                     {% set occupied = slot.get_occupied_capacity() %}
@@ -19,22 +17,41 @@
                         <div class="progress-bar" role="progressbar" style="width: {{ occupied / slot.capacity * 100 }}%">{{ occupied }}/{{ slot.capacity }}</div>
                     </div>
                 </h2>
-                <div id="collapse{{ slot.id }}" class="accordion-collapse collapse"
-                     aria-labelledby="heading{{ slot.id }}"
-                     data-bs-parent="#accordionExample">
+                <div id="collapse{{ slot.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ slot.id }}" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
                         <div>
                             <strong>Bestätigte Buchungen:</strong>
-                            <ul>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Impfung</th>
+                                    <th scope="col">Alter</th>
+                                </tr>
+                                </thead>
+                                <tbody>
                                 {% for reservation in slot.bookings if reservation.ack_at %}
-                                    <li>{{ reservation.name }} ({{ reservation.email }}) <a type="button" href="{{ url_for("web.delete", id=reservation.id) }}" class="btn btn-close" aria-label="Close"></a></li>
+                                    <tr>
+                                        <td>{{ reservation.name }}</td>
+                                        <td>
+                                            {% if reservation.email %}
+                                                <a href="mailto:{{ reservation.email }}">{{ reservation.email }}</a>
+                                            {% else %}
+                                                {{ "<keine>" }}
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ reservation.vaccination }}</td>
+                                        <td>{{ reservation.age }}</td>
+                                    </tr>
                                 {% endfor %}
-                            </ul>
+                                </tbody>
+                            </table>
                         </div>
                         <div>
-                            <a data-bs-toggle="collapse" data-bs-target="#collapseOpen{{ slot.id }}"
-                               aria-expanded="false" aria-controls="collapseOpen{{ slot.id }}">Offene
-                                Buchungen anzeigen</a>
+                            <a data-bs-toggle="collapse" data-bs-target="#collapseOpen{{ slot.id }}" aria-expanded="false" aria-controls="collapseOpen{{ slot.id }}">Nicht bestätigte
+                                                                                                                                                                     Buchungen
+                                                                                                                                                                     anzeigen</a>
                             <div class="collapse" id="collapseOpen{{ slot.id }}">
                                 <ul>
                                     {% for reservation in slot.bookings if reservation.ack_at is none %}
@@ -51,26 +68,51 @@
     <div class="mb-3 mt-3">
         <h4>Admin Buchung</h4>
         <p>Hier eingetragene Buchungen werden direkt als 'bestätigt' gespeichert. Zum Beipiel für Mitbürger, die
-            telefonisch reservieren oder keine Email Adresse besitzen (in diesem Fall die Adresse einfach nicht
-            ändern</p>
+           telefonisch reservieren oder keine Email Adresse besitzen (in diesem Fall die Adresse einfach nicht
+           ändern</p>
         <form action="{{ url_for('admin.create') }}" method="post">
-            <div class="mb-3 mt-3">
-                <label for="name" class="form-label">Vor- und Nachname:</label>
-                <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name"
-                       required>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="name" class="form-label">Vor- und Nachname:</label>
+                    <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name" required>
+                </div>
             </div>
-            <div class="mb-3 mt-3">
-                <label for="email" class="form-label">E-Mail Adresse:</label>
-                <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse oder leer lassen" name="email">
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="email" class="form-label">E-Mail Adresse:</label>
+                    <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse oder leer lassen" name="email">
+                </div>
             </div>
-            <div class="mb-3 mt-3">
-                <label for="timeslot" class="form-label">Termin:</label>
-                <select class="form-select" name="timeslot" required>
-                    <option selected disabled>Termin auswählen</option>
-                    {% for slot in timeslots %}
-                        <option value="{{ slot.id }}">{{ slot.start_time | time }}</option>
-                    {% endfor %}
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="timeslot" class="form-label">Termin:</label>
+                    <select class="form-select" name="timeslot" required>
+                        <option selected disabled>Termin auswählen</option>
+                        {% for slot in timeslots %}
+                            <option value="{{ slot.id }}">{{ slot.start_time | time }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="vaccination" class="form-label">Gewünsche Impfung:</label>
+                    <select class="form-select" name="vaccination" required>
+                        <option selected disabled value="">Auswählen...</option>
+                        <option value="1">Erstimpfung</option>
+                        <option value="2">Abschlussimpfung / Zweite Impfung</option>
+                        <option value="3">Booster Impfung</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="form-group">
+                    <label for="age" class="form-label">Alter:</label> <select class="form-select" name="age" required>
+                    <option selected disabled value="">Auswählen...</option>
+                    <option value="<30">Unter 30 Jahre</option>
+                    <option value=">=30">30 Jahre oder älter</option>
                 </select>
+                </div>
             </div>
             <button type="submit" class="btn btn-primary">Speichern</button>
         </form>

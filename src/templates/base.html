@@ -11,23 +11,15 @@
 </head>
 <body>
 <div class="container">
-    {% if messages %}
-        <div class="row">
-            <div class="col">
-                {% for m in messages %}
-                    <div class="alert alert-{{ m[0] }} alert-dismissible fade show">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
-                        {{ m[1] }}
-                    </div>
-                {% endfor %}
-            </div>
+    <div class="row">
+        <div class="col-12">
+            <h1>Terminbuchung Impfaktion Stadecken-Elsheim</h1>
         </div>
-    {% endif %}
-    <div class="mb-3 mt-3"><h1>Terminbuchung Impfaktion Stadecken-Elsheim</h1></div>
+    </div>
     {% block content %}{% endblock %}
-    <div style="font-weight: normal; text-align: center">
+    <div class="row" style="font-weight: normal; text-align: center">
         <hr>
-        <p style="font-weight: normal">Built by Felix Kreßmann - v0.5</p>
+        <p style="font-weight: normal">Built by Felix Kreßmann - v0.6</p>
     </div>
 </div>
 </body>
