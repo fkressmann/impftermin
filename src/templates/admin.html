@@ -87,7 +87,7 @@
             <div class="row mb-3">
                 <div class="form-group">
                     <label for="timeslot" class="form-label">Termin:</label>
-                    <select class="form-select" name="timeslot" required>
+                    <select class="form-select" name="timeslot" id="timeslot" required>
                         <option selected disabled>Termin auswählen</option>
                         {% for slot in timeslots %}
                             <option value="{{ slot.id }}">{{ slot.start_time | time }}</option>
@@ -98,7 +98,7 @@
             <div class="row mb-3">
                 <div class="form-group">
                     <label for="vaccination" class="form-label">Gewünsche Impfung:</label>
-                    <select class="form-select" name="vaccination" required>
+                    <select class="form-select" name="vaccination" id="vaccination" required>
                         <option selected disabled value="">Auswählen...</option>
                         <option value="1">Erstimpfung</option>
                         <option value="2">Abschlussimpfung / Zweite Impfung</option>
@@ -108,7 +108,7 @@
             </div>
             <div class="row mb-3">
                 <div class="form-group">
-                    <label for="age" class="form-label">Alter:</label> <select class="form-select" name="age" required>
+                    <label for="age" class="form-label">Alter:</label> <select class="form-select" name="age" id="age" required>
                     <option selected disabled value="">Auswählen...</option>
                     <option value="<30">Unter 30 Jahre</option>
                     <option value=">=30">30 Jahre oder älter</option>

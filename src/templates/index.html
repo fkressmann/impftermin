@@ -31,7 +31,7 @@
             <div class="row mb-3">
                 <div class="form-group">
                     <label for="vaccination" class="form-label">Gewünsche Impfung:</label>
-                    <select class="form-select" name="vaccination" required>
+                    <select class="form-select" name="vaccination" id="vaccination" required>
                         <option selected disabled value="">Auswählen...</option>
                         <option value="1">Erstimpfung</option>
                         <option value="2">Abschlussimpfung / Zweite Impfung</option>
@@ -42,7 +42,7 @@
             <div class="row mb-3">
                 <div class="form-group">
                     <label for="age" class="form-label">Alter:</label>
-                    <select class="form-select" name="age" aria-describedby="ageInfo" required>
+                    <select class="form-select" name="age" aria-describedby="ageInfo" id="age" required>
                         <option selected disabled value="">Auswählen...</option>
                         <option value="<30">Unter 30 Jahre</option>
                         <option value=">=30">30 Jahre oder älter</option>
@@ -71,7 +71,11 @@
                 </div>
             </div>
 
-            <button type="submit" class="btn btn-primary">Absenden</button>
+            <div class="row mb-3">
+                <div class="col">
+                    <button type="submit" class="btn btn-primary">Absenden</button>
+                </div>
+            </div>
         </form>
     </div>
 {% endblock %}
