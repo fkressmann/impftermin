@@ -3,17 +3,17 @@
     <div>
         <h2>Terminanfrage Impfaktion Stadecken-Elsheim</h2>
         <p>Sehr geehrte/r Herr/Frau {{ reservation.name }},</p>
-        <p>Bitte klicken Sie zeitnah auf den nachstehenden Link um Ihren Impftermin
+        <p>Bitte klicken Sie zeitnah auf den nachstehenden Link, um Ihren Impftermin
            am {{ reservation.timeslot.start_time | time }} zu bestätigen. </p>
         <p><a href="{{ url_for("web.confirm", id=reservation.id, _external=True) }}">Impftermin HIER bestätigen</a></p>
         <p>
-            Falls Sie keinen gültigen Test haben, kommen Sie bitte 20 Minuten <strong>vor</strong> dem Termin in die
-            <a href="https://goo.gl/maps/7R4QUekYBERtBfot9">Selztalhalle</a>, damit ein Schnelltest duchgeführt werden
-            kann.<br> <strong>Bitte kommen Sie pünktlich um einen reibungslosen Ablauf der Impfungen zu
-                              ermöglichen.</strong>
+            Falls Sie keinen gültigen Corona-Test haben, kommen Sie bitte 20 Minuten <strong>vor</strong> dem Termin in
+            die <a href="https://goo.gl/maps/7R4QUekYBERtBfot9">Selztalhalle</a>, damit ein Schnelltest duchgeführt
+            werden kann.<br> <strong>Bitte kommen Sie pünktlich, um einen reibungslosen Ablauf der Impfungen zu
+                                     ermöglichen.</strong>
         </p>
 
-        <p>Wenn Sie diesen Termin nicht registriert haben können Sie diese E-Mail einfach ignorieren.</p>
+        <p>Wenn Sie diesen Termin nicht registriert haben, können Sie diese E-Mail einfach ignorieren.</p>
         <p>Ihre Ortsgemeinde Stadecken-Elsheim</p>
     </div>
 {% endblock %}

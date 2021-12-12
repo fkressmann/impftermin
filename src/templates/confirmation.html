@@ -3,16 +3,16 @@
 {% block title %}Bestätigung{% endblock %}
 
 {% block content %}
-    <div class="mb-3 mt-3">
+    <div class="row mb-3 mt-3">
         <h4>Termin bestätigt</h4>
-        <p>Ihre Termin für {{ reservation.timeslot.start_time | time }} wurde reserviert.</p>
-        <p>Falls Sie keinen gültigen Test haben, kommen Sie bitte 20 Minuten <strong>vor</strong> dem Termin in die Selztalhalle, damit ein Schnelltest duchgeführt werden kann.</p>
-        <p><strong>Bitte kommen Sie pünktlich um einen reibungslosen Ablauf der Impfungen zu ermöglichen.</strong></p>
+        <p>Ihr Termin für {{ reservation.timeslot.start_time | time }} wurde reserviert.</p>
+        <p>Falls Sie keinen gültigen Corona-Test haben, kommen Sie bitte 20 Minuten <strong>vor</strong> dem Termin in die Selztalhalle, damit ein Schnelltest duchgeführt werden kann.</p>
+        <p><strong>Bitte kommen Sie pünktlich, um einen reibungslosen Ablauf der Impfungen zu ermöglichen.</strong></p>
     </div>
-    <div class="mb-3 mt-3">
+    <div class="row mb-3 mt-3">
         <h4>Termin ändern</h4>
         <p> Falls Sie diesen Termin versehentlich gebucht haben oder aus anderen Gründen absagen müssen, können sie dies hier tun.<br>
-            Beachten Sie, dass Ihr Termin dadurch gelöscht wird und nicht reaktiviert werden kann. <br>
+            Beachten Sie, dass Ihr Termin dadurch gelöscht wird und nicht reaktiviert werden kann.<br>
             Durch erneutes Klicken auf den Link aus der E-Mail könenn sie jederzeit wieder auf diese Seite gelangen um Ihren Termin zu löschen.</p>
         <p>Sie können sich jederzeit (vorbehaltlich Verfügbarkeit) erneut für einen Termin registrieren.</p>
         <p><a href="{{ url_for("web.delete", id=reservation.id) }}" class="btn btn-danger">Termin löschen</a></p>
