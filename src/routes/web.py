@@ -1,6 +1,7 @@
 import datetime
 
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, current_app
+from sqlalchemy.exc import IntegrityError
 
 from extensions.db import db
 from models.Timeslot import Timeslot
@@ -12,16 +13,22 @@ from util import *
 web_bp = Blueprint('web', __name__)
 
 
+@web_bp.before_request
+def is_registration_closed():
+    if datetime.datetime.now() > current_app.config.get("CLOSING_TIME"):
+        return render_template("index-ended.html", end=current_app.config.get("CLOSING_TIME"))
+
+
 @web_bp.route('/')
 def index():
     timeslots: [Timeslot] = Timeslot.query.order_by(Timeslot.start_time).all()
-    return render_template('index.html', timeslots=timeslots)
+    return render_template('index.html', timeslots=timeslots, end=current_app.config.get("CLOSING_TIME"))
 
 
 @web_bp.route('/reservation', methods=['POST'])
 def reservation():
     r = Reservation(request.form)
-    if r.valid:
+    if r.is_valid_external_request():
         if not r.timeslot.has_free_capacity():
             return "Timeslot is fully booked", 418
 
@@ -29,8 +36,12 @@ def reservation():
                           email=r.email,
                           timeslot=r.timeslot)
 
-        db.session.add(booking)
-        db.session.commit()
+        try:
+            db.session.add(booking)
+            db.session.commit()
+        except IntegrityError as e:
+            return render_template("email-duplicated.html")
+
         send_mail([booking.email],
                   "Terminanfrage Impfaktion Stadecken-Elsheim",
                   render_template("email.html", reservation=booking))
@@ -49,28 +60,6 @@ def confirm():
         maybe_booking.ack_at = datetime.datetime.now()
     db.session.commit()
     return render_template("confirmation.html", reservation=maybe_booking)
-
-
-@web_bp.route('/admin-6a3522f3-6c6e-4b0e-a044-d653177fbb91')
-def admin():
-    timeslots = Timeslot.query.order_by(Timeslot.start_time).all()
-    return render_template("admin.html", timeslots=timeslots)
-
-
-@web_bp.route('/admin-create-6a3522f3-6c6e-4b0e-a044-d653177fbb91', methods=['POST'])
-def admin_create():
-    r = Reservation(request.form)
-    if r.valid:
-        booking = Booking(name=r.name,
-                          email=r.email,
-                          timeslot=r.timeslot,
-                          ack_at=datetime.datetime.now())
-        db.session.add(booking)
-        db.session.commit()
-
-        return redirect(url_for('web.admin'))
-    else:
-        return "Invalid request!", 400
 
 
 @web_bp.route('/delete')

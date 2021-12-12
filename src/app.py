@@ -14,6 +14,7 @@ def create_app():
 def load_configuration(app):
     app.config.from_object('config')
 
+    app.config['CLOSING_TIME'] = datetime.fromisoformat(app.config['CLOSING_TIME']) if app.config['CLOSING_TIME'] else None
     app.config['SQLALCHEMY_DATABASE_URI'] = f"mysql+mysqlconnector://{app.config.get('DB_USER')}:{app.config.get('DB_PASSWORD')}@{app.config.get('DB_HOST')}/{app.config.get('DB_NAME')}"
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
@@ -35,8 +36,10 @@ def register_extensions(app):
 
 def register_blueprints(app):
     from routes.web import web_bp
+    from routes.admin import admin_bp
 
     app.register_blueprint(web_bp)
+    app.register_blueprint(admin_bp)
 
 
 app = create_app()

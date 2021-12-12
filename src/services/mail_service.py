@@ -19,17 +19,12 @@ def send_mail(to: list[str], subject: str, body: str):
 
     rcpt = to
 
-    print(datetime.datetime.now())
-
-    if current_app.config.get('MAIL_HOST'):
+    if current_app.config.get('MAIL_HOST') and not current_app.config.get('DEBUG'):
         with smtplib.SMTP(current_app.config.get('MAIL_HOST'), 25) as server:
             server.login(current_app.config.get('MAIL_USER'), current_app.config.get('MAIL_PASSWORD'))
             server.sendmail(current_app.config.get('MAIL_SENDER'), rcpt, msg_body)
     else:
         print(to)
         print(msg_body)
-
-    print(datetime.datetime.now())
-
 
 

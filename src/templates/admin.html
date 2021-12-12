@@ -53,7 +53,7 @@
         <p>Hier eingetragene Buchungen werden direkt als 'bestätigt' gespeichert. Zum Beipiel für Mitbürger, die
             telefonisch reservieren oder keine Email Adresse besitzen (in diesem Fall die Adresse einfach nicht
             ändern</p>
-        <form action="{{ url_for('web.admin_create') }}" method="post">
+        <form action="{{ url_for('admin.create') }}" method="post">
             <div class="mb-3 mt-3">
                 <label for="name" class="form-label">Vor- und Nachname:</label>
                 <input type="text" class="form-control" id="name" placeholder="Namen eingeben" name="name"
@@ -61,8 +61,7 @@
             </div>
             <div class="mb-3 mt-3">
                 <label for="email" class="form-label">E-Mail Adresse:</label>
-                <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse eingeben" name="email"
-                       value="{{ config.get("MAIL_REPLY_TO") }}" required>
+                <input type="email" class="form-control" id="email" placeholder="E-Mail Adresse oder leer lassen" name="email">
             </div>
             <div class="mb-3 mt-3">
                 <label for="timeslot" class="form-label">Termin:</label>

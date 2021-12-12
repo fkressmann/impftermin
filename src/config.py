@@ -9,4 +9,5 @@ MAIL_SENDER = os.environ.get("MAIL_SENDER")
 MAIL_USER = os.environ.get("MAIL_USER")
 MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
 MAIL_REPLY_TO = os.environ.get("MAIL_REPLY_TO")
-OWN_HOSTNAME = os.environ.get("OWN_HOSTNAME")
+CLOSING_TIME = os.environ.get("CLOSING_TIME")
+
