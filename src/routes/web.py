@@ -73,3 +73,8 @@ def delete():
         db.session.delete(maybe_booking)
         db.session.commit()
     return render_template("confirmation-deleted.html")
+
+
+@web_bp.route('/dataprotection')
+def dataprotection():
+    return render_template('dataprotection.html')
