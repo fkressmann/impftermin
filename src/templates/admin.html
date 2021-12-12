@@ -5,7 +5,7 @@
 {% block content %}
     <h4>Admin</h4>
     <p>Hier sind alle Buchungen gelistet. In die Anzahl belegter Plätze gehen nur bestätigte Buchungen ein.</p>
-    <p>Alle bestätigen Buchungen können <a href="{{ url_for("admin.print") }}">HIER</a> ausgedruckt werden</p>
+    <p>Alle bestätigen Buchungen können <a href="{{ url_for("admin.print_bookings") }}">HIER</a> ausgedruckt werden</p>
     <div class="accordion" id="accordionExample">
         {% for slot in timeslots %}
             <div class="accordion-item">
@@ -29,6 +29,7 @@
                                     <th scope="col">Email</th>
                                     <th scope="col">Impfung</th>
                                     <th scope="col">Alter</th>
+                                    <th scope="col">Löschen</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -44,19 +45,25 @@
                                         </td>
                                         <td>{{ reservation.vaccination }}</td>
                                         <td>{{ reservation.age }}</td>
+                                        <td>
+                                            <a type="button" href="{{ url_for("web.delete", id=reservation.id) }}" class="btn btn-close"></a>
+                                        </td>
                                     </tr>
                                 {% endfor %}
                                 </tbody>
                             </table>
                         </div>
                         <div>
-                            <a data-bs-toggle="collapse" data-bs-target="#collapseOpen{{ slot.id }}" aria-expanded="false" aria-controls="collapseOpen{{ slot.id }}">Nicht bestätigte
+                            <a class="btn btn-outline-info" data-bs-toggle="collapse" data-bs-target="#collapseOpen{{ slot.id }}" aria-expanded="false" aria-controls="collapseOpen{{ slot.id }}">Nicht
+                                                                                                                                                                     bestätigte
                                                                                                                                                                      Buchungen
                                                                                                                                                                      anzeigen</a>
                             <div class="collapse" id="collapseOpen{{ slot.id }}">
                                 <ul>
                                     {% for reservation in slot.bookings if reservation.ack_at is none %}
-                                        <li>{{ reservation.name }} ({{ reservation.email }})</li>
+                                        <li>{{ reservation.name }} ({{ reservation.email }})
+                                            <a type="button" href="{{ url_for("web.confirm", id=reservation.id) }}" class="btn btn-outline-success">Bestätigen</a>
+                                        </li>
                                     {% endfor %}
                                 </ul>
                             </div>
@@ -66,11 +73,13 @@
             </div>
         {% endfor %}
     </div>
-    <div class="mb-3 mt-3">
-        <h4>Admin Buchung</h4>
-        <p>Hier eingetragene Buchungen werden direkt als 'bestätigt' gespeichert. Zum Beipiel für Mitbürger, die
-           telefonisch reservieren oder keine Email Adresse besitzen (in diesem Fall die Adresse einfach nicht
-           ändern</p>
+    <div class="mt-4">
+        <div class="row">
+            <h4>Admin Buchung</h4>
+            <p>Hier eingetragene Buchungen werden direkt als 'bestätigt' gespeichert. Zum Beipiel für Mitbürger, die
+               telefonisch reservieren oder keine Email Adresse besitzen (in diesem Fall die Adresse einfach nicht
+               ändern</p>
+        </div>
         <form action="{{ url_for('admin.create') }}" method="post">
             <div class="row mb-3">
                 <div class="form-group">
@@ -108,11 +117,12 @@
             </div>
             <div class="row mb-3">
                 <div class="form-group">
-                    <label for="age" class="form-label">Alter:</label> <select class="form-select" name="age" id="age" required>
-                    <option selected disabled value="">Auswählen...</option>
-                    <option value="<30">Unter 30 Jahre</option>
-                    <option value=">=30">30 Jahre oder älter</option>
-                </select>
+                    <label for="age" class="form-label">Alter:</label>
+                    <select class="form-select" name="age" id="age" required>
+                        <option selected disabled value="">Auswählen...</option>
+                        <option value="<30">Unter 30 Jahre</option>
+                        <option value=">=30">30 Jahre oder älter</option>
+                    </select>
                 </div>
             </div>
             <button type="submit" class="btn btn-primary">Speichern</button>
