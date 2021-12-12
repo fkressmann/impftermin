@@ -34,3 +34,9 @@ def create():
         return redirect(url_for('.index'))
     else:
         return "Invalid request!", 400
+
+
+@admin_bp.route('/admin-print-6a3522f3-6c6e-4b0e-a044-d653177fbb91')
+def print():
+    timeslots = Timeslot.query.order_by(Timeslot.start_time).all()
+    return render_template("admin-print.html", timeslots=timeslots)

@@ -5,6 +5,7 @@
 {% block content %}
     <h4>Admin</h4>
     <p>Hier sind alle Buchungen gelistet. In die Anzahl belegter Plätze gehen nur bestätigte Buchungen ein.</p>
+    <p>Alle bestätigen Buchungen können <a href="{{ url_for("admin.print") }}">HIER</a> ausgedruckt werden</p>
     <div class="accordion" id="accordionExample">
         {% for slot in timeslots %}
             <div class="accordion-item">
