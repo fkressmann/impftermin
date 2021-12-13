@@ -16,5 +16,8 @@ class Timeslot(db.Model):
     def get_free_capacity(self):
         return self.capacity - len(list([b for b in self.bookings if b.ack_at]))
 
+    def get_non_ack_capacity(self):
+        return len(list([b for b in self.bookings if not b.ack_at]))
+
     def has_free_capacity(self):
         return self.get_free_capacity() > 0

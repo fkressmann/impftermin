@@ -10,7 +10,7 @@
     <title>Impftermine Stadecken-Elsheim</title>
 </head>
 <body>
-<div class="container-fluid">
+<div class="container-fluid" style="-webkit-print-color-adjust: exact;">
     <div class="row">
         <div class="col-12">
             <h1>Impftermine Impfaktion Stadecken-Elsheim</h1>
@@ -23,27 +23,23 @@
             <th scope="col">Email</th>
             <th scope="col">Impfung</th>
             <th scope="col">Alter</th>
+            <th scope="col">Bestätigt?</th>
         </tr>
         </thead>
         <tbody>
         {% for slot in timeslots %}
-            <tr>
-                <th>
+            <tr class="table-primary">
+                <th colspan="100%">
                     {{ slot.start_time | time }}
                 </th>
             </tr>
-            {% for reservation in slot.bookings if reservation.ack_at %}
-                <tr>
+            {% for reservation in slot.bookings%}
+                <tr {% if not reservation.ack_at %}class="table-secondary"{% endif %}>
                     <td>{{ reservation.name }}</td>
-                    <td>
-                        {% if reservation.email %}
-                            <a href="mailto:{{ reservation.email }}">{{ reservation.email }}</a>
-                        {% else %}
-                            {{ "<keine>" }}
-                        {% endif %}
-                    </td>
+                    <td>{{ reservation.email }}</td>
                     <td>{{ reservation.vaccination }}</td>
                     <td>{{ reservation.age }}</td>
+                    <td>{{ "Ja" if reservation.ack_at else "Nein" }}</td>
                 </tr>
             {% endfor %}
         {% endfor %}
@@ -51,7 +47,7 @@
     </table>
     <div class="row" style="font-weight: normal; text-align: center">
         <hr>
-        <p style="font-weight: normal">Built by Felix Kreßmann - v0.6</p>
+        <p style="font-weight: normal">Built by Felix Kreßmann - v1.5</p>
     </div>
 </div>
 </body>
