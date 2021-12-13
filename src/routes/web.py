@@ -56,9 +56,9 @@ def reservation():
 def confirm():
     maybe_booking: Booking = Booking.query.get(request.args.get("id"))
     if not maybe_booking:
-        return "Reservation not found", 404
+        return render_template("confirmation-not-found.html")
 
-    if not maybe_booking.timeslot.has_free_capacity():
+    if not maybe_booking.ack_at and not maybe_booking.timeslot.has_free_capacity():
         db.session.delete(maybe_booking)
         db.session.commit()
         return render_template("confirmation-full.html")

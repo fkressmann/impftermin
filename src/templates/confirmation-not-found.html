@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block title %}Fehler{% endblock %}
+
+{% block content %}
+    <div>
+        <h4>Termin nicht gefunden</h4>
+        <p>Ihre Reservierung konnte leider nicht gefunden werden.</p>
+        <p>Durch einen Fehler im System sind am 13.12. eventuell wenige Termine verloren gegangen. <br>
+           Wenn Sie Ihren Termin bereits bestätigt hatten, setzten Sie sich bitte telefonisch mit der Gemeinde in Verbindung: 06136 2248</p>
+        <p>Sie können <a href="{{ url_for("web.index") }}">HIER</a> einen neuen Termin buchen.</p>
+    </div>
+{% endblock %}
