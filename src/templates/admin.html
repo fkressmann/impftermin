@@ -18,7 +18,7 @@
                     {% set non_ack = slot.get_non_ack_capacity() %}
                     <div class="progress">
                         <div class="progress-bar {% if occupied > slot.capacity %}bg-danger{% endif %}" role="progressbar" style="width: {{ occupied / slot.capacity * 100 }}%">{{ occupied }}/{{ slot.capacity }}</div>
-                        <div class="progress-bar bg-secondary" role="progressbar" style="width: {{ non_ack / slot.capacity * 100 }}%">{{ non_ack }}</div>
+                        {% if occupied < slot.capacity %}<div class="progress-bar bg-secondary" role="progressbar" style="width: {{ non_ack / slot.capacity * 100 }}%">{{ non_ack }}</div>{% endif %}
                     </div>
                 </h2>
                 <div id="collapse{{ slot.id }}" class="accordion-collapse collapse" aria-labelledby="heading{{ slot.id }}" data-bs-parent="#accordionExample">
