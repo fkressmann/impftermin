@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Ausgebucht{% endblock %}
+
+{% block content %}
+    <div class="row mb-3 mt-3">
+        <h4>Zeitfenster ausgebucht</h4>
+        <p>Das von Ihnen angefragte Zeitfenster wurde zwischnzeitig ausgebucht.</p>
+        <p>Das System hat Ihre Terminanfrage nun storniert. Bitte suchen Sie sich auf der <a href="{{ url_for("web.index") }}">Hauptseite</a> ein neues Zeitfenster aus und reservieren Sie erneut.</p>
+    </div>
+
+{% endblock %}
