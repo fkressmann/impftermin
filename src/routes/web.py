@@ -8,14 +8,15 @@ from models.Timeslot import Timeslot
 from models.Booking import Booking
 from requests.Reservation import Reservation
 from services.mail_service import send_mail
-from util import *
 
 web_bp = Blueprint('web', __name__)
 
 
 @web_bp.before_request
-def is_registration_closed():
-    if datetime.datetime.now() > current_app.config.get("CLOSING_TIME"):
+def is_registration_open():
+    if datetime.datetime.now() < current_app.config.get("START_TIME"):
+        return render_template("index-not-started.html", start=current_app.config.get("START_TIME"))
+    elif datetime.datetime.now() > current_app.config.get("CLOSING_TIME"):
         return render_template("index-ended.html", end=current_app.config.get("CLOSING_TIME"))
 
 
