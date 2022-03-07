@@ -11,14 +11,17 @@ from util import *
 
 admin_bp = Blueprint('admin', __name__)
 
+# Yep this will be changed before the next deployment :D
+admin_hidden_link = '6a3522f3-6c6e-4b0e-a044-d653177fbb91'
 
-@admin_bp.route('/admin-6a3522f3-6c6e-4b0e-a044-d653177fbb91')
+
+@admin_bp.route(f"/admin-{admin_hidden_link}")
 def index():
     timeslots = Timeslot.query.order_by(Timeslot.start_time).all()
     return render_template("admin.html", timeslots=timeslots)
 
 
-@admin_bp.route('/admin-create-6a3522f3-6c6e-4b0e-a044-d653177fbb91', methods=['POST'])
+@admin_bp.route(f"/admin-create-{admin_hidden_link}", methods=['POST'])
 def create():
     r = Reservation(request.form)
     if r.is_valid_admin_request():
@@ -39,7 +42,7 @@ def create():
         return "Invalid request!", 400
 
 
-@admin_bp.route('/admin-print-6a3522f3-6c6e-4b0e-a044-d653177fbb91')
+@admin_bp.route(f"/admin-print-{admin_hidden_link}")
 def print_bookings():
     timeslots = Timeslot.query.order_by(Timeslot.start_time).all()
     return render_template("admin-print.html", timeslots=timeslots)
